@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173f37">
+  <title>Computer Studies Quiz | Results System</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="./"><span class="brand-icon" aria-hidden="true">R.</span>Results<span class="brand-light">System</span></a><span class="header-label">THE LEARNING LAB</span></header>
+  <main>
+    <section class="intro"><div class="eyebrow"><span></span> KNOWLEDGE CHECK</div><h1>A little challenge.<br>A smarter you.</h1><p>Put your Computer Studies knowledge to the test.<br class="desktop-break"> Take your time, trust your thinking, and see what you know.</p></section>
+    <section class="quiz-card" id="quiz-card" aria-label="Computer Studies quiz">
+      <div id="welcome"><div class="subject-icon" aria-hidden="true">⌘</div><span class="tag">COMPUTER STUDIES</span><h2>Ready to test your skills?</h2><p class="muted">From hardware to online safety, explore the essentials of computing in one short quiz.</p><div class="quiz-facts"><div><strong>10</strong><span>Questions</span></div><div><strong>~5 min</strong><span>At your own pace</span></div><div><strong>1 point</strong><span>Per correct answer</span></div></div><button class="primary" id="start">Start the quiz <span aria-hidden="true">→</span></button><p class="small-note">No timer. No pressure. Just learning.</p></div>
+      <form id="quiz" hidden><div class="question-meta"><span class="tag">COMPUTER STUDIES</span><span id="question-count"></span></div><div class="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"><div id="progress"></div></div><fieldset><legend id="question" tabindex="-1"></legend><p class="instruction">Choose one answer below.</p><div id="options"></div></fieldset><div class="quiz-actions"><span id="answer-status" role="status">Select an answer to continue</span><button class="primary" id="next" type="submit" disabled>Next question <span aria-hidden="true">→</span></button></div></form>
+      <div id="results" hidden><span class="tag">QUIZ COMPLETE</span><h2 id="result-heading" tabindex="-1">Your results</h2><div class="score-circle"><strong id="score"></strong><span>correct answers</span></div><p id="result-message" class="muted"></p><div class="result-actions"><button class="primary" id="restart">Try again <span aria-hidden="true">↻</span></button><button class="secondary" id="review-toggle" aria-expanded="false" aria-controls="review">Review answers</button></div><div id="review" hidden></div></div>
+    </section>
+    <div class="learning-note"><span aria-hidden="true">✦</span><p><strong>Every question is a chance to learn.</strong><br>Review your answers at the end and build your confidence.</p></div>
+  </main><footer><span>RESULTS SYSTEM</span><p>A space to practice. A place to grow.</p><span>COMPUTER STUDIES · QUIZ 01</span></footer>
+</body>
+</html>
