@@ -344,14 +344,15 @@ function renderNavigation(){
  $('course-label').textContent=`${courses[activeApp].name} Tutorial`;
  const practiceLink=document.querySelector('.practice-card a');
  practiceLink.setAttribute('href',isQuiz?`#${activeApp}/getting-started`:'#practice');
- practiceLink.innerHTML=isQuiz?'Back to tutorials <span>←</span>':'Go to practice <span>↗</span>';
+ practiceLink.textContent=isQuiz?'Back to tutorials →':'View exercise →';
+ document.querySelector('.practice-card p').textContent=isQuiz?'Review the lessons before your next attempt.':'Follow the exercise in your desktop application.';
  renderLessonLinks();
 }
 function renderLessonLinks(){
  const term=$('search').value.trim().toLowerCase();
  const apps=term?Object.entries(courses):[[activeApp,courses[activeApp]]];
  const matches=apps.flatMap(([id,c])=>[...c.lessons.map((l,i)=>({id,c,l,i})), {id,c,l:['quiz',`${c.name} practice quiz`,'Multiple-choice questions and answers',['Quiz','Questions','Answers','Explanations'],'','','',[], '', '', '', ''],i:-1}]).filter(({c,l})=>!term||term.split(/\s+/).every(word=>`${c.name} ${l[1]} ${l[2]} ${l[3].join(' ')} ${l[5]} ${l[7].join(' ')} ${l[11]}`.toLowerCase().includes(word)));
- $('chapter-label').textContent=term?`${matches.length} SEARCH RESULTS`:'YOUR LEARNING PATH';
+ $('chapter-label').textContent=term?`${matches.length} SEARCH RESULTS`:'COURSE CONTENTS';
  $('empty-search').hidden=matches.length!==0;
  $('lesson-nav').innerHTML=matches.map(({id,c,l,i})=>`<a class="lesson-link ${id===activeApp&&i===(isQuiz?-1:activeLesson)?'active':''}" href="#${key(id,l)}" ${id===activeApp&&i===(isQuiz?-1:activeLesson)?'aria-current="page"':''}><span class="number">${i===-1?'?':completed.includes(key(id,l))?'✓':String(i+1).padStart(2,'0')}</span><span>${term?`${c.name} · `:''}${l[1]}</span>${id===activeApp&&i===(isQuiz?-1:activeLesson)?'<span class="arrow">›</span>':''}</a>`).join('');
 }
@@ -369,7 +370,7 @@ function render(){
  document.title=`${c.name} 2021: ${l[1]} | Results System`;
  document.documentElement.style.setProperty('--app',c.color);
  const isDone=completed.includes(key(activeApp,l));
- $('lesson').innerHTML=`<div class="breadcrumb"><a href="#word/getting-started">Learning library</a><span>›</span><a href="#${activeApp}/getting-started">${c.name} 2021</a><span>›</span><span>${l[1]}</span></div><div class="lesson-kicker">${c.name.toUpperCase()} 2021 <span class="dot"></span> LESSON ${String(activeLesson+1).padStart(2,'0')} OF ${String(c.lessons.length).padStart(2,'0')}</div><h1 class="lesson-title">${l[1]}</h1><p class="lesson-intro">${l[2]}</p><div class="lesson-meta"><span>◷ ${activeLesson===0?'5':'7'} min read & practice</span><span>◉ Beginner</span><span>▤ Windows desktop</span></div><section class="learning-box"><h2>What you’ll learn</h2><ul>${l[3].map(t=>`<li>${t}</li>`).join('')}</ul></section><section id="overview"><h2>${l[4]}</h2><p>${l[5]}</p></section><section id="steps"><h2>${l[6]}</h2><ol class="steps">${l[7].map(t=>`<li>${t}</li>`).join('')}</ol></section><section class="example" id="example"><div class="example-title"><span>${l[8]}</span><span>ILLUSTRATIVE EXAMPLE</span></div><div class="example-body">${l[9]}</div></section><div class="tip"><span aria-hidden="true">☼</span><p><strong>A helpful tip</strong><br>${l[10]}</p></div><section class="practice" id="practice"><h2>✎ Your turn to try</h2><p>${l[11]}</p><button class="complete-button" id="complete" aria-pressed="${isDone}">${isDone?'✓ Lesson completed':'Mark lesson complete'}</button><p id="completion-status" role="status"></p></section><a class="quiz-callout" href="#${activeApp}/quiz"><span><strong>Ready to check your knowledge?</strong><small>Try the ${c.name} 2021 multiple-choice quiz.</small></span><span aria-hidden="true">→</span></a>`;
+ $('lesson').innerHTML=`<div class="breadcrumb"><a href="#word/getting-started">Learning library</a><span>›</span><a href="#${activeApp}/getting-started">${c.name} 2021</a><span>›</span><span>${l[1]}</span></div><div class="lesson-kicker">${c.name.toUpperCase()} 2021 <span class="dot"></span> LESSON ${String(activeLesson+1).padStart(2,'0')} OF ${String(c.lessons.length).padStart(2,'0')}</div><h1 class="lesson-title">${l[1]}</h1><p class="lesson-intro">${l[2]}</p><div class="lesson-meta"><span>${activeLesson===0?'5':'7'} min read & practice</span><span>Beginner level</span><span>Windows desktop</span></div><section class="learning-box"><h2>What you’ll learn</h2><ul>${l[3].map(t=>`<li>${t}</li>`).join('')}</ul></section><section id="overview"><h2>${l[4]}</h2><p>${l[5]}</p></section><section id="steps"><h2>${l[6]}</h2><ol class="steps">${l[7].map(t=>`<li>${t}</li>`).join('')}</ol></section><section class="example" id="example"><div class="example-title"><span>${l[8]}</span><span>EXAMPLE</span></div><div class="example-body">${l[9]}</div></section><div class="tip"><p><strong>Note</strong><br>${l[10]}</p></div><section class="practice" id="practice"><h2>Practice exercise</h2><p>${l[11]}</p><button class="complete-button" id="complete" aria-pressed="${isDone}">${isDone?'✓ Lesson completed':'Mark lesson complete'}</button><p id="completion-status" role="status"></p></section><a class="quiz-callout" href="#${activeApp}/quiz"><span><strong>Practice quiz</strong><small>Try the ${c.name} 2021 multiple-choice quiz.</small></span><span aria-hidden="true">→</span></a>`;
  $('complete').addEventListener('click',()=>{
   const k=key(activeApp,l);const done=!completed.includes(k);
   completed=done?[...completed,k]:completed.filter(x=>x!==k);
@@ -387,7 +388,7 @@ function render(){
 $('search').addEventListener('input',renderLessonLinks);
 $('lesson-nav').addEventListener('click',e=>{if(e.target.closest('a')){$('search').value='';$('sidebar').classList.remove('open');$('mobile-menu').setAttribute('aria-expanded','false');renderLessonLinks();}});
 $('mobile-menu').addEventListener('click',()=>{const open=$('sidebar').classList.toggle('open');$('mobile-menu').setAttribute('aria-expanded',String(open));if(open)$('sidebar').scrollIntoView({block:'start',behavior:'smooth'});});
-document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){e.preventDefault();if(innerWidth<=700){$('sidebar').classList.add('open');$('mobile-menu').setAttribute('aria-expanded','true');}$('search').focus();}if(e.key==='Escape'&&document.activeElement===$('search')){$('search').value='';renderLessonLinks();$('search').blur();}});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){e.preventDefault();if(innerWidth<=760){$('sidebar').classList.add('open');$('mobile-menu').setAttribute('aria-expanded','true');}$('search').focus();}if(e.key==='Escape'&&document.activeElement===$('search')){$('search').value='';renderLessonLinks();$('search').blur();}});
 window.addEventListener('hashchange',()=>{const isLesson=location.hash.includes('/');render();if(isLesson){$('lesson').focus({preventScroll:true});$('main').scrollIntoView({block:'start'});}});
 render();
 
